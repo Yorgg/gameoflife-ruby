@@ -1,13 +1,14 @@
-# Conway's Game 
+# Game of Life 
 
 This is a simple Ruby implementation of Conway's Game of life.
 The game takes a board and updates it in-place. 
 
+`0(1)` space complexity
 
-## Setup: 
+`0(h*w)` time complexity 
 
 ```ruby
-# dead cells => 0, alive cells => 1
+# dead cell => 0, alive cell => 1
 
 board = [[0,1,0,1],[0,0,1,1],[1,1,1,1],[1,0,0,0]]]
 
