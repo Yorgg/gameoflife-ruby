@@ -3,24 +3,28 @@ class GameOfLife
   
   def initialize(board)
     @board = board
-    @h = board.size-1 
-    @w = board[0].size-1 
+    @h     = board.size-1 
+    @w     = board[0].size-1 
   end
    
-  def next_gen!
-    0.upto(h) do |r|
-      0.upto(w) do |c|
-        add_next_state_to_cell(r,c)
+  def next_generation!
+    iterate_board {|row,col| add_next_state_to_cell!(row,col) }
+    iterate_board {|row,col| evolve_cell!(row,col) }
+  end
+
+  private
+
+  def iterate_board
+    0.upto(h) do |r| 
+      0.upto(w) do |c| 
+        yield(r,c)
       end
     end
-    update_cells!
   end
-  
-  private
-  
-  def add_next_state_to_cell(r,c)
+
+  def cell_alive_in_next_gen?(r,c)
     count = alive_neighbors_count(r,c)
-    board[r][c] |= 2 if count == 3 || count == 2 && board[r][c] == 1 
+    count == 3 || count == 2 && board[r][c] == 1 
   end
 
   def alive_neighbors_count(r,c)
@@ -34,9 +38,13 @@ class GameOfLife
     count
   end
   
-  def update_cells!
-    0.upto(h) {|r| 0.upto(w) {|c| board[r][c] >>= 1}} 
+  def evolve_cell!(r,c)
+    board[r][c] >>= 1 
+  end
+
+  def add_next_state_to_cell!(r,c)
+    if cell_alive_in_next_gen?(r,c)
+      board[r][c] |= 2 
+    end
   end
 end
-
-
